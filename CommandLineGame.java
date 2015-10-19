@@ -1,4 +1,5 @@
 import model.Game;
+import model.Representation;
 
 import java.util.Scanner;
 
@@ -8,15 +9,18 @@ public class CommandLineGame {
         final Game game;
 
         if (args != null && args.length > 0) {
-            final int numberOfStones = Integer.valueOf(args[0]);
-            game = new Game(numberOfStones);
+            final int housesPerPlayer = Integer.valueOf(args[0]);
+            final int numberOfStones = Integer.valueOf(args[1]);
+            game = new Game(housesPerPlayer, numberOfStones);
         } else {
             game = new Game();
         }
 
+        final Representation representation = new Representation(game.getBoard());
+
         while (!game.isFinished()) {
             int position = -1;
-            System.out.println(game.getBoard());
+            System.out.println(representation.draw());
             System.out.println("Player " + game.getPlayer() + ", please input move...");
 
             while (!(position > 0 && position < 7)) {

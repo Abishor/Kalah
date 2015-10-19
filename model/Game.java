@@ -2,14 +2,14 @@ package model;
 
 public class Game {
     private boolean firstPlayerTurn = true;
-    private final Board board;
+    private final BoardImpl board;
 
-    public Game(final int stones) {
-        board = new Board(stones);
+    public Game(final int housesPerPlayer, final int stones) {
+        board = new BoardImpl(housesPerPlayer, stones);
     }
 
     public Game() {
-        this(6);
+        this(6, 6);
     }
 
     public void move(final int houseNumber) {
@@ -25,7 +25,7 @@ public class Game {
         while (stones > 0) {
             pos = (pos + 1) % 14;
             // the player drops one seed in each house in turn, including the player's own store but not their opponent's
-            if (firstPlayerTurn && pos == Board.STORE[1] || !firstPlayerTurn && pos == Board.STORE[0]) {
+            if (firstPlayerTurn && pos == board.getStores()[1] || !firstPlayerTurn && pos == board.getStores()[0]) {
                 continue;
             }
             board.addStone(pos);
@@ -34,14 +34,14 @@ public class Game {
             // Last stone
             if (stones == 0) {
                 // If the last sown seed lands in the player's store, the player gets an additional move
-                if (firstPlayerTurn && pos == Board.STORE[0] || !firstPlayerTurn && pos == Board.STORE[1]) {
+                if (firstPlayerTurn && pos == board.getStores()[0] || !firstPlayerTurn && pos == board.getStores()[1]) {
                     changeTurn = false;
                 }
 
                 // If the last sown seed lands in an empty house
                 if (board.getStones(pos) == 1) {
                     // owned by the player
-                    if (firstPlayerTurn && pos >= 0 && pos < Board.STORE[0] || !firstPlayerTurn && pos > Board.STORE[0]) {
+                    if (firstPlayerTurn && pos >= 0 && pos < board.getStores()[0] || !firstPlayerTurn && pos > board.getStores()[0]) {
                         board.grabOppositeStones(pos);
                     }
                 }
@@ -57,7 +57,7 @@ public class Game {
         return firstPlayerTurn ? 1 : 2;
     }
 
-    public Board getBoard() {
+    public BoardImpl getBoard() {
         return board;
     }
 
@@ -66,7 +66,7 @@ public class Game {
     }
 
     public String getWinner() {
-        final int diff = board.getStones(Board.STORE[0]) - board.getStones(Board.STORE[1]);
+        final int diff = board.getStones(board.getStores()[0]) - board.getStones(board.getStores()[1]);
         if (diff == 0) {
             return "DRAW!";
         }
