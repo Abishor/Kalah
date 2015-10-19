@@ -4,11 +4,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
-public class Representation {
+public class ConsoleRepresentation {
     private final Board board;
     private final int digits, housesPerPlayer;
 
-    public Representation(final Board board) {
+    public ConsoleRepresentation(final Board board) {
         checkNotNull(board, "A board must be specified");
         this.board = board;
         digits = board.getTotalStones().toString().length();

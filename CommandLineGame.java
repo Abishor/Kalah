@@ -1,11 +1,12 @@
+import model.ConsoleRepresentation;
 import model.Game;
-import model.Representation;
 
 import java.util.Scanner;
 
 public class CommandLineGame {
+    private static final Scanner in = new Scanner(System.in);
+
     public static void main(final String[] args) {
-        final Scanner in = new Scanner(System.in);
         final Game game;
 
         if (args != null && args.length > 0) {
@@ -16,24 +17,32 @@ public class CommandLineGame {
             game = new Game();
         }
 
-        final Representation representation = new Representation(game.getBoard());
+        final ConsoleRepresentation consoleRepresentation = new ConsoleRepresentation(game.getBoard());
+
 
         while (!game.isFinished()) {
-            int position = -1;
-            System.out.println(representation.draw());
-            System.out.println("Player " + game.getPlayer() + ", please input move...");
+            System.out.println(consoleRepresentation.draw());
 
-            while (!(position > 0 && position < 7)) {
-                try {
-                    position = Integer.parseInt(in.nextLine());
-                } catch (NumberFormatException e) {
-                    position = -1;
-                    System.out.println("Player " + game.getPlayer() + ", please input valid move (1 to 6)...");
-                }
+            System.out.println("Player " + game.getPlayer() + ", please input move...");
+            int position = readStartingPosition();
+
+            while (!game.validChoice(position)) {
+                System.out.println("Player " + game.getPlayer() + ", please input move...");
+                position = readStartingPosition();
             }
             game.move(position);
         }
 
         System.out.println(game.getWinner());
+    }
+
+    private static int readStartingPosition() {
+        int position = -1;
+        try {
+            position = Integer.parseInt(in.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Please input valid move...");
+        }
+        return position;
     }
 }

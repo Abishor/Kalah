@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Representation of the board, the houses being represented anti-clockwise with a 0-index as the start
+ * ConsoleRepresentation of the board, the houses being represented anti-clockwise with a 0-index as the start
  */
 public interface Board {
     Integer getNumberOfHousesPerPlayer();
